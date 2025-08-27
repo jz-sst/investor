@@ -1,0 +1,776 @@
+### Code Implementation Document for Investment App
+
+#### 1. Document Overview
+- **Product Name**: InvestTrack Pro
+- **Version**: 1.0
+- **Date**: August 24, 2025
+- **Author**: Grok (AI Assistant)
+- **Purpose**: This document provides the exact code required to reproduce the theme and web design depicted in the provided screenshots. It focuses on replicating the visual elements, layouts, colors, typography, and interactive components across all screens (Settings, Alerts, Opportunities, Projects, Portfolio, Market Scanner, Stock Analysis, and Dashboard). The implementation uses HTML, CSS (with variables for theming), and minimal JavaScript for interactivity, assuming a web platform. For cross-platform compatibility (e.g., mobile/web), this can be adapted to frameworks like React or Tailwind CSS.
+- **Scope**: Global theme CSS, screen-specific HTML structures, and basic JS for dynamic elements. Does not include backend logic, API integrations, or full functionality (e.g., real-time data fetching), as those are outlined in the associated PRD. Future expansions could include React components or Flutter widgets.
+- **Assumptions**: 
+  - Built using standard web technologies (HTML5, CSS3, JS ES6).
+  - Fonts: System sans-serif (e.g., 'Inter' or 'Roboto' for clean, modern look); load via Google Fonts if needed.
+  - Colors extracted from screenshots: Dark navy backgrounds, teal accents, white/light gray text.
+  - Responsiveness: Mobile-first with media queries for desktop layouts.
+  - Dependencies: None; pure vanilla code for simplicity.
+- **Key Metrics for Success**: Exact visual match to screenshots; load time <1 second; cross-browser compatibility (Chrome, Firefox, Safari).
+
+#### 2. Objectives and Goals
+- **Implementation Objectives**:
+  - Replicate the dark theme with high fidelity to ensure consistent user experience.
+  - Provide modular code for easy maintenance and scalability.
+  - Enable quick prototyping for testing on web platforms.
+- **Developer Goals**:
+  - Use CSS variables for theme customization (e.g., switch to light mode).
+  - Structure HTML semantically for accessibility.
+  - Include placeholders for dynamic content (e.g., charts via Canvas or libraries like Chart.js).
+- **Key Metrics for Success**:
+  - Visual accuracy: 95%+ match to screenshots via pixel comparison.
+  - Code efficiency: Minified CSS/JS; no unused styles.
+  - Usability: Keyboard-navigable; ARIA attributes for screen readers.
+
+#### 3. Target Environment
+- **Primary Platforms**: Web browsers (desktop/mobile); adaptable to iOS/Android via webviews.
+- **Personas**:
+  - Frontend Developer: Needs clean, commented code for integration.
+  - Designer: Focuses on theme variables for tweaks.
+  - Tester: Verifies layouts across devices.
+- **Pain Points Addressed**: Inconsistent theming; complex layouts; non-responsive designs.
+
+#### 4. Theme and Global Styles
+The core theme is a dark mode with navy blues, teal accents, rounded corners, and subtle shadows. All screens share this theme.
+
+- **Key Features**:
+  - Colors: Primary dark (#0a192f), accent teal (#14b8a6), cyan buttons (#06b6d4), text white (#f1f5f9), secondary dark (#1e293b).
+  - Typography: Font size 14-16px base; bold for headers.
+  - Spacing: Padding/margins in rem units for scalability.
+  - Interactivity: Hover effects on buttons; toggles for switches.
+
+- **Functional Requirements**:
+  - CSS file: `theme.css` (import into HTML).
+  - Responsiveness: Flexbox/Grid for layouts; media queries for sidebar navigation.
+
+- **Code**:
+```css
+/* theme.css */
+:root {
+  --bg-primary: #0a192f; /* Dark navy background */
+  --bg-secondary: #1e293b; /* Card backgrounds */
+  --accent-teal: #14b8a6; /* Buttons, highlights */
+  --accent-cyan: #06b6d4; /* Alternate buttons */
+  --text-primary: #f1f5f9; /* White text */
+  --text-secondary: #94a3b8; /* Gray text */
+  --border-radius: 0.5rem;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --font-family: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 200px;
+  background: var(--bg-primary);
+  padding: 1rem;
+  border-right: 1px solid var(--bg-secondary);
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar nav li {
+  margin: 1rem 0;
+}
+
+.sidebar nav a {
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+}
+
+.sidebar nav a.active {
+  background: var(--accent-teal);
+}
+
+.main-content {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.card {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 1rem;
+}
+
+.button {
+  background: var(--accent-teal);
+  color: var(--text-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.button:hover {
+  background: darken(var(--accent-teal), 10%);
+}
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--accent-teal);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--bg-primary);
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--bg-secondary);
+  }
+}
+```
+
+#### 5. Screen-Specific Implementations
+Each screen is implemented as an HTML file linking to `theme.css`. Layouts use flex/grid for replication. Placeholders for charts (e.g., <div class="chart"></div>) assume integration with libraries like Chart.js.
+
+##### 5.1 Settings Screen
+- **Description**: Account management, notifications, preferences, integrations, and danger zone.
+- **Key Features**: Profile edit, toggles for notifications, table for integrations, delete button.
+- **Code** (settings.html):
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvestTrack Pro - Settings</title>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>InvestTrack Pro</h2>
+      <nav>
+        <ul>
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Portfolio</a></li>
+          <li><a href="#">Stock Analysis</a></li>
+          <li><a href="#">Market Scanner</a></li>
+          <li><a href="#">Opportunities</a></li>
+          <li><a href="#">Projects</a></li>
+          <li><a href="#">Alerts</a></li>
+          <li><a href="#" class="active">Settings</a></li>
+        </ul>
+      </nav>
+      <div class="user-profile">
+        <img src="user-avatar.jpg" alt="Alex Morgan">
+        <p>Alex Morgan<br>Premium</p>
+      </div>
+    </aside>
+    <main class="main-content">
+      <header>
+        <h1>Settings</h1>
+        <button class="button">Help</button>
+        <button class="button" style="background: var(--accent-cyan);">Save Changes</button>
+      </header>
+      <section class="card">
+        <h2>Profile</h2>
+        <img src="user-avatar.jpg" alt="Alex Morgan">
+        <p>Alex Morgan<br>alex.morgan@example.com</p>
+        <button class="button">Change</button>
+      </section>
+      <section class="card">
+        <h2>Notifications</h2>
+        <label>Email Alerts <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label></label>
+        <label>Push Notifications <label class="toggle"><input type="checkbox"><span class="slider"></span></label></label>
+        <label>Critical Only Mode <label class="toggle"><input type="checkbox"><span class="slider"></span></label></label>
+      </section>
+      <section class="card">
+        <h2>Preferences</h2>
+        <label>Dark Mode <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label></label>
+        <label>Language <select><option>English</option></select></label>
+        <label>Quiet Hours <input type="text" value="22:00 - 07:00"></label>
+      </section>
+      <section class="card">
+        <h2>Integrations</h2>
+        <table class="table">
+          <thead>
+            <tr><th>Service</th><th>Status</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Slack</td><td>Disconnected</td><td><button class="button">Connect</button></td></tr>
+            <tr><td>Webhooks</td><td>2 Endpoints</td><td><button class="button">Manage</button></td></tr>
+            <tr><td>Email Digest</td><td>Weekly</td><td><button class="button">Configure</button></td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="card">
+        <h2>Danger Zone</h2>
+        <button class="button" style="background: var(--accent-cyan);">Request Deletion</button>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+```
+
+##### 5.2 Alerts Screen
+- **Description**: Alert summary, recent alerts table, rules list, export/acknowledge buttons.
+- **Key Features**: Summary cards, table with severity badges, mute toggles.
+- **Code** (alerts.html):
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvestTrack Pro - Alerts</title>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar"> <!-- Same as above --></aside>
+    <main class="main-content">
+      <header>
+        <h1>Alerts Center</h1>
+        <input type="text" placeholder="Search Alerts...">
+        <button class="button">Filters</button>
+        <button class="button" style="background: var(--accent-cyan);">New Rule</button>
+      </header>
+      <section class="card">
+        <h2>Summary</h2>
+        <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem;">
+          <div class="card">Open<br>18</div>
+          <div class="card">Acknowledged<br>12</div>
+          <div class="card">Resolved<br>34</div>
+          <div class="card">Avg Time to Close<br>1.8d</div>
+        </div>
+      </section>
+      <section class="card">
+        <h2>Recent Alerts</h2>
+        <table class="table">
+          <thead>
+            <tr><th>Alert</th><th>Project</th><th>Triggered</th><th>Severity</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>ROI below 5%</td><td>Logistics Hub</td><td>2h ago</td><td>High</td><td>Open</td></tr>
+            <tr><td>IRR under 10%</td><td>EV Charging Lot</td><td>1d ago</td><td>Medium</td><td>Acknowledged</td></tr>
+            <tr><td>Cashflow variance >15%</td><td>Solar Farm A</td><td>3d ago</td><td>Critical</td><td>Resolved</td></tr>
+          </tbody>
+        </table>
+        <button class="button">Export</button>
+        <button class="button" style="background: var(--accent-cyan);">Acknowledge Selected</button>
+      </section>
+      <section class="card">
+        <h2>Rules</h2>
+        <!-- Similar list of cards for rules -->
+      </section>
+      <section class="card">
+        <h2>Mute & Channels</h2>
+        <!-- Toggles and descriptions -->
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+```
+
+##### 5.3 Opportunities Screen
+- **Description**: Filters for stocks/ETFs, technical/fundamental criteria, apply button.
+- **Key Features**: Tabbed filters, dropdowns, checkboxes.
+- **Code** (opportunities.html):
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvestTrack Pro - Opportunities</title>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar"> <!-- Same as above --></aside>
+    <main class="main-content">
+      <header>
+        <h1>Opportunities</h1>
+        <input type="text" placeholder="Search ideas...">
+        <button class="button">Filters</button>
+        <button class="button" style="background: var(--accent-cyan);">Save Screen</button>
+      </header>
+      <section class="card">
+        <h2>Filters</h2>
+        <div class="tabs">
+          <button class="button active">Stocks</button>
+          <button class="button">ETFs</button>
+        </div>
+        <form>
+          <label>Universe <input type="text" value="Exchange: All"></label>
+          <!-- More labels for Sector, Market Cap, etc. -->
+          <h3>Technical</h3>
+          <label>RSI (14) <input type="text" value="< 30"></label>
+          <!-- More technical fields -->
+          <h3>Fundamentals</h3>
+          <label>P/E <input type="text" value="5 - 40"></label>
+          <!-- More fundamental fields -->
+          <button class="button">Reset</button>
+          <button class="button" style="background: var(--accent-cyan);">Run</button>
+        </form>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+```
+
+##### 5.4 Projects Screen
+- **Description**: Portfolio summary, projects table, pipeline kanban, cashflow metrics.
+- **Key Features**: Summary cards, table with ROI/IRR, filters, aggregate KPIs.
+- **Code** (projects.html):
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvestTrack Pro - Projects</title>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar"> <!-- Same as above --></aside>
+    <main class="main-content">
+      <header>
+        <h1>Capital Projects</h1>
+        <input type="text" placeholder="Search projects...">
+        <button class="button">Filters</button>
+        <button class="button" style="background: var(--accent-cyan);">New Project</button>
+      </header>
+      <section class="card">
+        <h2>Portfolio Summary</h2>
+        <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));">
+          <div class="card">Total Invested<br>$2.4M</div>
+          <div class="card">Current Value<br>$3.1M</div>
+          <div class="card">Total ROI<br>+29%</div>
+          <div class="card">Annualized IRR<br>14.2%</div>
+        </div>
+      </section>
+      <section class="card">
+        <h2>Projects Performance</h2>
+        <table class="table">
+          <thead>
+            <tr><th>Project</th><th>Invested</th><th>Current Value</th><th>ROI</th><th>IRR</th><th>Payback</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Solar Farm A</td><td>$600k</td><td>$820k</td><td>+36.7%</td><td>15.4%</td><td>2.8 yrs</td></tr>
+            <!-- More rows -->
+          </tbody>
+        </table>
+      </section>
+      <section class="card">
+        <h2>Pipeline</h2>
+        <!-- Kanban view placeholders -->
+      </section>
+      <section class="card">
+        <h2>Cashflows & Metrics</h2>
+        <!-- Progress bars and KPIs -->
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+```
+
+##### 5.5 Portfolio Screen
+- **Description**: Holdings table, performance chart, transaction history, allocation pie, rebalancing suggestions.
+- **Key Features**: Export button, risk metrics, suggestions table.
+- **Code** (portfolio.html):
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvestTrack Pro - Portfolio</title>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar"> <!-- Same as above --></aside>
+    <main class="main-content">
+      <header>
+        <h1>Portfolio</h1>
+        <input type="text" placeholder="Search holdings, tickers...">
+        <button class="button">Import</button>
+        <button class="button" style="background: var(--accent-cyan);">Add Holding</button>
+      </header>
+      <section class="card grid" style="display: grid; grid-template-columns: repeat(4, 1fr);">
+        <div>Total Value<br>$248,920 <small>+1.0% Today</small></div>
+        <div>Unrealized P/L<br>+$32,410 <small>+12.4% YTD</small></div>
+        <div>Cash<br>$12,500</div>
+        <div>Risk Score<br>Moderate</div>
+      </section>
+      <section class="card">
+        <h2>Holdings</h2>
+        <table class="table">
+          <thead>
+            <tr><th>Asset</th><th>Qty</th><th>Avg Cost</th><th>Market Value</th><th>P/L</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>AAPL</td><td>220</td><td>$165.00</td><td>$43,656</td><td>+12%</td></tr>
+            <!-- More rows -->
+          </tbody>
+        </table>
+        <button class="button">Export</button>
+      </section>
+      <section class="card">
+        <h2>Performance</h2>
+        <div class="chart"></div> <!-- Placeholder for chart -->
+      </section>
+      <section class="card">
+        <h2>Transaction History</h2>
+        <table class="table">
+          <!-- History rows -->
+        </table>
+      </section>
+      <section class="card">
+        <h2>Allocation</h2>
+        <div class="pie-chart"></div> <!-- Placeholder -->
+        <button class="button" style="background: var(--accent-cyan);">View Suggestions</button>
+      </section>
+      <section class="card">
+        <h2>Risk & Goals</h2>
+        <table class="table">
+          <!-- Metrics rows -->
+        </table>
+      </section>
+      <section class="card">
+        <h2>Rebalancing Suggestions</h2>
+        <table class="table">
+          <thead>
+            <tr><th>Asset</th><th>Current</th><th>Target</th><th>Diff</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Tech</td><td>42%</td><td>36%</td><td>-6%</td><td>Sell 10% AAPL</td></tr>
+            <!-- More -->
+          </tbody>
+        </table>
+        <button class="button">Apply</button>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+```
+
+##### 5.6 Market Scanner Screen
+- **Description**: Filters similar to Opportunities, results table, heatmap placeholder.
+- **Key Features**: Presets, export CSV, add to watchlist.
+- **Code** (market-scanner.html):
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvestTrack Pro - Market Scanner</title>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar"> <!-- Same as above --></aside>
+    <main class="main-content">
+      <header>
+        <h1>Market Scanner</h1>
+        <input type="text" placeholder="Search or load preset...">
+        <button class="button">Save Scan</button>
+        <button class="button" style="background: var(--accent-cyan);">Run</button>
+      </header>
+      <section class="card">
+        <h2>Filters</h2>
+        <!-- Similar to Opportunities, with technical/fundamentals -->
+        <button class="button">Clear</button>
+        <button class="button" style="background: var(--accent-cyan);">Apply Filters</button>
+      </section>
+      <section class="card">
+        <h2>Results</h2>
+        <div class="grid">
+          <div>Matches<br>128</div>
+          <div>Avg RSI<br>42</div>
+          <div>Upside vs 200MA<br>+3.4%</div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr><th>Ticker</th><th>Price</th><th>% Chg</th><th>RSI</th><th>Trend</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>AAPL</td><td>$198.42</td><td>+1.2%</td><td>62</td><td>Bullish</td></tr>
+            <!-- More -->
+          </tbody>
+        </table>
+        <button class="button">Export CSV</button>
+        <button class="button" style="background: var(--accent-cyan);">Add to Watchlist</button>
+      </section>
+      <section class="card">
+        <h2>Heatmap</h2>
+        <div class="heatmap"></div> <!-- Placeholder -->
+      </section>
+      <section class="card">
+        <h2>Presets</h2>
+        <!-- List of preset buttons -->
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+```
+
+##### 5.7 Stock Analysis Screen
+- **Description**: Ticker details, charts, fundamentals table, news, analyst ratings, events.
+- **Key Features**: Time range buttons, signal badges, peer comparison table.
+- **Code** (stock-analysis.html):
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvestTrack Pro - Stock Analysis</title>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar"> <!-- Same as above --></aside>
+    <main class="main-content">
+      <header>
+        <h1>Stock Analysis</h1>
+        <input type="text" placeholder="Search ticker or company...">
+        <button class="button">Watchlist</button>
+        <button class="button" style="background: var(--accent-cyan);">Add to Portfolio</button>
+      </header>
+      <section class="card">
+        <h2>AAPL $198.42 NASDAQ</h2>
+        <div class="chart"></div> <!-- Price chart -->
+        <div class="tabs">
+          <button>1D</button><button>1W</button><button>1M</button><button>1Y</button>
+        </div>
+        <p>Real-time price, volume, and VWAP overlay</p>
+      </section>
+      <section class="card">
+        <h2>Fundamentals</h2>
+        <table class="table">
+          <tr><td>P/E</td><td>31.2</td><td>EPS</td><td>$6.42</td></tr>
+          <!-- More metrics -->
+        </table>
+      </section>
+      <section class="card">
+        <h2>Technical Summary</h2>
+        <table class="table">
+          <tr><td>RSI (14)</td><td>62</td><td>Bullish</td><td>Momentum rising</td></tr>
+          <!-- More indicators -->
+        </table>
+      </section>
+      <section class="card">
+        <h2>News</h2>
+        <table class="table">
+          <tr><td>Headline</td><td>Source</td><td>Time</td><td>Sentiment</td></tr>
+          <!-- News rows -->
+        </table>
+      </section>
+      <section class="card">
+        <h2>Analyst Ratings</h2>
+        <table class="table">
+          <tr><td>Firm</td><td>Rating</td><td>Target</td><td>Change</td></tr>
+          <!-- Ratings rows -->
+        </table>
+      </section>
+      <section class="card">
+        <h2>Events</h2>
+        <table class="table">
+          <tr><td>Event</td><td>Date</td><td>Impact</td><td>Action</td></tr>
+          <!-- Events rows -->
+        </table>
+      </section>
+      <section class="card">
+        <h2>Peer Comparison</h2>
+        <table class="table">
+          <tr><td>Ticker</td><td>1M %</td><td>P/E</td><td>Market Cap</td></tr>
+          <!-- Peers rows -->
+        </table>
+        <button class="button" style="background: var(--accent-cyan);">Update</button>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+```
+
+##### 5.8 Dashboard Screen
+- **Description**: Overview cards, performance chart, news feed, alerts, allocation pie, watchlist table, opportunities.
+- **Key Features**: Auto-refresh note, signal badges, run button for scanner.
+- **Code** (dashboard.html):
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvestTrack Pro - Dashboard</title>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar"> <!-- Same as above --></aside>
+    <main class="main-content">
+      <header>
+        <h1>Dashboard</h1>
+        <input type="text" placeholder="Search tickers, news...">
+        <button class="button">Alerts</button>
+        <button class="button" style="background: var(--accent-cyan);">+ Add</button>
+      </header>
+      <section class="card grid" style="display: grid; grid-template-columns: repeat(4, 1fr);">
+        <div>Total Portfolio Value<br>$248,920 <small>+1.0% Today</small></div>
+        <div>Daily P/L<br>+$4,320 <small>Last 24h</small></div>
+        <div>YTD Return<br>+12.4%</div>
+        <div>Risk Score<br>Moderate</div>
+      </section>
+      <section class="card">
+        <h2>Performance Overview</h2>
+        <div class="chart"></div>
+        <div class="tabs">
+          <button>1D</button><button>1W</button><button>1M</button><button>1Y</button>
+        </div>
+      </section>
+      <section class="card">
+        <h2>Key Indices</h2>
+        <div class="grid">
+          <div>S&P 500<br>5,235.12 <small>+0.2%</small></div>
+          <!-- More indices -->
+        </div>
+      </section>
+      <section class="card">
+        <h2>Alerts</h2>
+        <table class="table">
+          <tr><td>Alert</td><td>Condition</td><td>Status</td><td>Action</td></tr>
+          <!-- Alert rows -->
+        </table>
+      </section>
+      <section class="card">
+        <h2>Recent News</h2>
+        <div class="news-feed">
+          <!-- News cards with images -->
+        </div>
+      </section>
+      <section class="card">
+        <h2>Allocation</h2>
+        <div class="pie-chart"></div>
+        <button class="button">Rebalance</button>
+      </section>
+      <section class="card">
+        <h2>Watchlist</h2>
+        <table class="table">
+          <tr><td>Ticker</td><td>Price</td><td>Change</td><td>Signal</td><td>Actions</td></tr>
+          <!-- Watchlist rows -->
+        </table>
+        <button class="button" style="background: var(--accent-cyan);">Add</button>
+      </section>
+      <section class="card">
+        <h2>Opportunities</h2>
+        <table class="table">
+          <tr><td>Ticker</td><td>Price</td><td>RSI</td><td>Score</td><td>Action</td></tr>
+          <!-- Opportunities rows -->
+        </table>
+        <button class="button">Run</button>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+```
+
+#### 6. Technical Requirements
+- **Architecture**: Static HTML/CSS/JS; extend to SPA with React for dynamic updates.
+- **Integrations**: Add Chart.js for charts: `<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>`.
+- **Performance**: Minify CSS/JS; lazy-load images.
+- **Accessibility**: Add ARIA roles (e.g., aria-label on toggles).
+- **Testing**: Visual regression tests with tools like Percy.
+
+#### 7. Risks and Dependencies
+- **Risks**: Color variations due to screenshot compression; browser rendering differences.
+- **Dependencies**: Font CDN (e.g., Google Fonts for 'Inter').
+- **Mitigations**: Use hex colors from analysis; test on multiple devices.
+
+#### 8. Appendix
+- **Wireframes**: Matches provided screenshots.
+- **Prioritization**: Start with theme.css, then dashboard.html as MVP.
+- **Approval**: Pending developer review.
